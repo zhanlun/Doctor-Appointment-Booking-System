@@ -33,7 +33,7 @@ namespace NgDoctorBookingSystem
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext appDbContext)
         {
             if (env.IsDevelopment())
             {
@@ -58,6 +58,9 @@ namespace NgDoctorBookingSystem
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+            AppDbInit.SeedData(appDbContext);
         }
     }
 }
