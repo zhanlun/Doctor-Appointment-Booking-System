@@ -103,7 +103,24 @@ namespace NgDoctorBookingSystem.Controllers
                 return View(model);
             }
 
-            return View();
+            var patient = new Patient
+            {
+                ICNo = model.ICNo,
+                Name = model.Name,
+                PhoneNo = model.PhoneNo,
+                RegisteredDate = DateTime.Now
+            };
+
+            _appDbContext.Patients.Add(patient);
+            _appDbContext.SaveChanges();
+
+            // login
+            int id = patient.Id;
+
+            HttpContext.Session.SetString(SESSION_ROLE, "patient");
+            HttpContext.Session.SetInt32(SESSION_ID, id);
+
+            return RedirectToAction("Index", "Patient");
         }
 
         public IActionResult Privacy()
