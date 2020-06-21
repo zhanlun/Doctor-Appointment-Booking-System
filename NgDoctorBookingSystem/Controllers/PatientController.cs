@@ -156,5 +156,26 @@ namespace NgDoctorBookingSystem.Controllers
 
             return RedirectToAction("Index", "Patient");
         }
+
+        [HttpPost]
+        public IActionResult Cancel(int id)
+        {
+            int patientId = (int)HttpContext.Session.GetInt32(HomeController.SESSION_ID);
+
+            var appointment = _appDbContext.Appointments
+                .Where(x => x.PatientId == patientId)
+                .Where(x => x.Id ==id)
+                .FirstOrDefault();
+
+            if (appointment == null)
+            {
+                return RedirectToAction("Index", "Patient");
+            }
+
+            _appDbContext.Appointments.Remove(appointment);
+            _appDbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Patient");
+        }
     }
 }
