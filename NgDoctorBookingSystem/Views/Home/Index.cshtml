@@ -1,4 +1,5 @@
-﻿@{
+﻿@model LoginViewModel
+@{
     Layout = "_LoginLayout";
     ViewData["Title"] = "Login";
 }
@@ -6,23 +7,26 @@
     <div class="row">
         <div class="col-lg-4 col-md-6 ml-auto mr-auto">
             <div class="card text-white bg-primary mb-3 mt-5">
-                <form class="form" method="post">
+                <form class="form" method="post" asp-controller="Home" asp-action="Index">
                     <div class="card-header card-header text-center">
                         <h4 class="card-title">Welcome Back</h4>
                         <p class="text-center">To Doctor Appointment Booking System</p>
                     </div>
                     <div class="card-body my-auto pb-3">
                         <div class="form-group">
-                            <label for="exampleInput">IC</label>
-                            <input type="text" class="form-control" id="exampleInput" placeholder="Enter IC no.">
+                            <label asp-for="ICNo"></label>
+                            <input type="text" class="form-control" asp-for="ICNo" placeholder="Enter IC no.">
+                            <span asp-validation-for="ICNo" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Phone</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Phone no.">
+                            <label asp-for="PhoneNo"></label>
+                            <input type="text" class="form-control" asp-for="PhoneNo" placeholder="Phone no.">
+                            <span asp-validation-for="PhoneNo" class="text-danger"></span>
                         </div>
+
                         <div class="form-group">
-                            <label for="exampleSelect1">I am a...</label>
-                            <select class="form-control" id="exampleSelect1">
+                            <label asp-for="Role">I am a...</label>
+                            <select asp-for="Role" class="form-control" id="exampleSelect1">
                                 <option value="patient">Patient</option>
                                 <option value="doctor">Doctor</option>
                             </select>

@@ -17,6 +17,14 @@ namespace NgDoctorBookingSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Doctor>()
+                .HasIndex(u => u.ICNo)
+                .IsUnique();
+
+            modelBuilder.Entity<Patient>()
+                .HasIndex(u => u.ICNo)
+                .IsUnique();
+
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;

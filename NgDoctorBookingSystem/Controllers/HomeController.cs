@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NgDoctorBookingSystem.Data;
 using NgDoctorBookingSystem.Models;
 using NgDoctorBookingSystem.Models.Patient;
 
@@ -12,16 +14,71 @@ namespace NgDoctorBookingSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        public const string SESSION_ROLE = "_ROLE";
+        public const string SESSION_ID = "_ID";
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _appDbContext;
+
+        public HomeController(ILogger<HomeController> logger, AppDbContext appDbContext)
         {
             _logger = logger;
+            _appDbContext = appDbContext;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+
+            string role = model.Role;
+            int id = -1;
+
+            if (role == "patient")
+            {
+                var user = _appDbContext.Patients
+                    .Where(x => x.ICNo == model.ICNo && x.PhoneNo == model.PhoneNo)
+                    .FirstOrDefault();
+
+                if (user == null)
+                {
+                    return View();
+                }
+
+                id = user.Id;
+            }
+            else if (role == "doctor")
+            {
+                var user = _appDbContext.Doctors
+                    .Where(x => x.ICNo == model.ICNo && x.PhoneNo == model.PhoneNo)
+                    .FirstOrDefault();
+
+                if (user == null)
+                {
+                    return View();
+                }
+
+                id = user.Id;
+            }
+            else
+            {
+                return View();
+            }
+
+            HttpContext.Session.SetString(SESSION_ROLE, role);
+            HttpContext.Session.SetInt32(SESSION_ID, id);
+
+            return RedirectToAction("Index", role);
         }
 
         [HttpGet]

@@ -17,14 +17,14 @@ namespace NgDoctorBookingSystem.Data
                     new Doctor
                     {
                         Name = "Dr Hafiz",
-                        ICNo = "850532106403",
-                        PhoneNo = "013018282555"
+                        ICNo = "888888888888",
+                        PhoneNo = "0123456789"
                     },
                     new Doctor
                     {
                         Name = "Dr Rositah",
-                        ICNo = "881315106406",
-                        PhoneNo = "013018282555"
+                        ICNo = "999999999999",
+                        PhoneNo = "0198765432"
                     }
                 };
 
