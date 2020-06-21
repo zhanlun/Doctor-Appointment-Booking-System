@@ -32,6 +32,14 @@
                             </select>
                         </div>
 
+                        @if (ViewData["msg"] != null)
+                        {
+                            <div class="alert alert-dismissible alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>@ViewData["msg"]</strong>
+                            </div>
+                        }
+
                         <div class="text-center py-auto my-auto mx-auto">
                             <a class="btn btn-danger mx-auto" asp-action="Register" asp-controller="Home">Register</a>
                             <button type="submit" class="btn btn-success mx-auto">Log on</button>

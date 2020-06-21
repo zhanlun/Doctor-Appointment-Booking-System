@@ -52,6 +52,7 @@ namespace NgDoctorBookingSystem.Controllers
 
                 if (user == null)
                 {
+                    ViewData["msg"] = "Not found!";
                     return View();
                 }
 
@@ -65,6 +66,7 @@ namespace NgDoctorBookingSystem.Controllers
 
                 if (user == null)
                 {
+                    ViewData["msg"] = "Not found!";
                     return View();
                 }
 
@@ -92,6 +94,12 @@ namespace NgDoctorBookingSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(model);
+            }
+
+            if (_appDbContext.Patients.Where(x => x.ICNo == model.ICNo).Count() > 0)
+            {
+                ViewData["msg"] = "IC No is in use!";
                 return View(model);
             }
 

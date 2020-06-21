@@ -30,6 +30,14 @@
                             <span asp-validation-for="PhoneNo" class="text-danger"></span>
                         </div>
 
+                        @if (ViewData["msg"] != null)
+                        {
+                            <div class="alert alert-dismissible alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>@ViewData["msg"]</strong>
+                            </div>
+                        }
+
                         <div class="text-center py-auto my-auto mx-auto">
                             <a class="btn btn-secondary mx-auto" asp-action="Index" asp-controller="Home">Back</a>
                             <button type="submit" class="btn btn-success mx-auto">Register</button>
