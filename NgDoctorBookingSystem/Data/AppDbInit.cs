@@ -31,6 +31,36 @@ namespace NgDoctorBookingSystem.Data
                 appDbContext.Doctors.AddRange(doctors);
                 appDbContext.SaveChanges();
             }
+
+            if (appDbContext.Conditions.Count() == 0)
+            {
+                Condition[] conditions =
+                {
+                    new Condition
+                    {
+                        Name = "Obsessive-compulsive disorder"
+                    },
+                    new Condition
+                    {
+                        Name = "Post-traumatic stress disorder"
+                    },
+                    new Condition
+                    {
+                        Name = "Generalised anxiety disorder"
+                    },
+                    new Condition
+                    {
+                        Name = "Depression"
+                    },
+                    new Condition
+                    {
+                        Name = "Others"
+                    }
+                };
+
+                appDbContext.Conditions.AddRange(conditions);
+                appDbContext.SaveChanges();
+            }
         }
     }
 }

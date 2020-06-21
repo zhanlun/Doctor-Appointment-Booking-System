@@ -35,14 +35,14 @@
             <tr>
                 <th scope="row">@(i+1)</th>
                 <td>@appointment.DateTime</td>
-                <td>@appointment.DateApproved</td>
+                <td>@(appointment.DateApproved == null ? "WAITING APPROVAL" : appointment.DateApproved.ToString())</td>
                 <td>@appointment.DoctorId</td>
-                <td>@appointment.Doctor.Name</td>
+                <td>@appointment.Doctor?.Name</td>
                 <td>@appointment.ConditionId</td>
-                <td>@appointment.Condition.Name</td>
+                <td>@appointment.Condition?.Name</td>
 
                 <td>
-                    <a class="text-danger">
+                    <a class="text-primary">
                         <span class="material-icons">
                             create
                         </span>
@@ -51,11 +51,11 @@
                 <td>
 
                     <form method="post">
-                        <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#cancelModal_@appointment.Id">
+                        <a class="text-danger" data-toggle="modal" data-target="#cancelModal_@appointment.Id">
                             <span class="material-icons">
                                 delete
                             </span>
-                        </button>
+                        </a>
 
                         <div class="modal fade" id="cancelModal_@appointment.Id">
                             <div class="modal-dialog" role="document">

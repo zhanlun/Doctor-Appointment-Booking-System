@@ -14,9 +14,5 @@ namespace NgDoctorBookingSystem.Controllers
             return View();
         }
 
-        public IActionResult Condition()
-        {
-            return View();
-        }
     }
 }
