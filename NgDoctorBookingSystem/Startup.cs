@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NgDoctorBookingSystem.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace NgDoctorBookingSystem
 {
@@ -23,7 +25,11 @@ namespace NgDoctorBookingSystem
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connString = Configuration["Data:Test:ConnectionString"];
             services.AddControllersWithViews();
+            services.AddDbContext<AppDbContext>(
+                options => options.UseSqlServer(connString));
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
