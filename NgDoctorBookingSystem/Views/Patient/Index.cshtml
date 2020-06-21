@@ -42,7 +42,7 @@
                 <td>@appointment.Condition?.Name</td>
 
                 <td>
-                    <a class="text-primary">
+                    <a class="text-primary" asp-action="Update" asp-controller="Patient" asp-route-id="@appointment.Id">
                         <span class="material-icons">
                             create
                         </span>

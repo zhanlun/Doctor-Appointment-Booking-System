@@ -36,9 +36,74 @@ namespace NgDoctorBookingSystem.Controllers
             return View(model);
         }
 
-        public IActionResult Update()
+        [HttpGet]
+        public IActionResult Update(int id)
         {
-            return View();
+            int patientId = (int)HttpContext.Session.GetInt32(HomeController.SESSION_ID);
+
+            var conditionsList = _appDbContext.Conditions
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var doctorsList = _appDbContext.Doctors
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var model = _appDbContext.Appointments
+                .Where(x => x.PatientId == patientId)
+                .Where(x => x.Id == id)
+                .Select(x => new AppointmentViewModel
+                {
+                    Id = x.Id,
+                    ConditionId = x.ConditionId,
+                    DoctorId = x.DoctorId,
+                    DateTime = x.DateTime,
+                    ConditionsList = conditionsList,
+                    DoctorsList = doctorsList
+                })
+                .FirstOrDefault();
+            
+            if (model == null)
+            {
+                return RedirectToAction("Index", "Patient");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(AppointmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            int patientId = (int)HttpContext.Session.GetInt32(HomeController.SESSION_ID);
+
+            var appointment = _appDbContext.Appointments
+                .Where(x => x.PatientId == patientId)
+                .Where(x => x.Id == model.Id)
+                .FirstOrDefault();
+
+            if (appointment == null)
+            {
+                return RedirectToAction("Index", "Patient");
+            }
+
+            appointment.DoctorId = model.DoctorId;
+            appointment.ConditionId = model.ConditionId;
+            appointment.DateTime = model.DateTime;
+
+            _appDbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Patient");
         }
 
         [HttpGet]
