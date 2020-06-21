@@ -1,0 +1,19 @@
+﻿@model Condition
+@{
+    Layout = "_DoctorLayout";
+    ViewData["Title"] = "New Condition";
+}
+
+<div class="mx-auto center col-lg-6 col-md-8 col-sm-10 col-xs-12">
+    <h3>New Condition</h3>
+    <form asp-controller="Doctor" asp-action="Condition" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Confirm</button>
+    </form>
+
+</div>

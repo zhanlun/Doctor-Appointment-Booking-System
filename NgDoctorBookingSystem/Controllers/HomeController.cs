@@ -16,6 +16,7 @@ namespace NgDoctorBookingSystem.Controllers
     {
         public const string SESSION_ROLE = "_ROLE";
         public const string SESSION_ID = "_ID";
+        public const string SESSION_NAME = "_NAME";
 
         private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _appDbContext;
@@ -42,6 +43,7 @@ namespace NgDoctorBookingSystem.Controllers
 
 
             string role = model.Role;
+            string name = "";
             int id = -1;
 
             if (role == "patient")
@@ -56,6 +58,7 @@ namespace NgDoctorBookingSystem.Controllers
                     return View();
                 }
 
+                name = user.Name;
                 id = user.Id;
             }
             else if (role == "doctor")
@@ -70,6 +73,7 @@ namespace NgDoctorBookingSystem.Controllers
                     return View();
                 }
 
+                name = user.Name;
                 id = user.Id;
             }
             else
@@ -79,6 +83,7 @@ namespace NgDoctorBookingSystem.Controllers
 
             HttpContext.Session.SetString(SESSION_ROLE, role);
             HttpContext.Session.SetInt32(SESSION_ID, id);
+            HttpContext.Session.SetString(SESSION_NAME, name);
 
             return RedirectToAction("Index", role);
         }
