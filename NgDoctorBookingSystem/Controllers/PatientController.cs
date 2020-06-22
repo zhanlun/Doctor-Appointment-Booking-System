@@ -26,6 +26,11 @@ namespace NgDoctorBookingSystem.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "patient")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             var model = _appDbContext.Appointments
                 .Where(x => x.PatientId == HttpContext.Session.GetInt32(HomeController.SESSION_ID))
                 .Include(x => x.Condition)
@@ -38,6 +43,11 @@ namespace NgDoctorBookingSystem.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "patient")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             int patientId = (int)HttpContext.Session.GetInt32(HomeController.SESSION_ID);
 
             var conditionsList = _appDbContext.Conditions
@@ -79,6 +89,11 @@ namespace NgDoctorBookingSystem.Controllers
         [HttpPost]
         public IActionResult Update(AppointmentViewModel model)
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "patient")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -108,6 +123,11 @@ namespace NgDoctorBookingSystem.Controllers
         [HttpGet]
         public IActionResult Book()
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "patient")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             var conditionsList = _appDbContext.Conditions
                 .Select(x => new SelectListItem 
                 { 
@@ -135,6 +155,11 @@ namespace NgDoctorBookingSystem.Controllers
         [HttpPost]
         public IActionResult Book(AppointmentViewModel model)
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "patient")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -159,6 +184,11 @@ namespace NgDoctorBookingSystem.Controllers
         [HttpPost]
         public IActionResult Cancel(int id)
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "patient")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             int patientId = (int)HttpContext.Session.GetInt32(HomeController.SESSION_ID);
 
             var appointment = _appDbContext.Appointments

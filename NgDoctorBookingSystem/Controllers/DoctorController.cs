@@ -24,6 +24,11 @@ namespace NgDoctorBookingSystem.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "doctor")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             var model = _appDbContext.Appointments
                 .Where(x => x.DoctorId == HttpContext.Session.GetInt32(HomeController.SESSION_ID))
                 .Include(x => x.Condition)
@@ -35,6 +40,11 @@ namespace NgDoctorBookingSystem.Controllers
 
         public IActionResult Approve(int id)
         {
+            if (HttpContext.Session.GetString(HomeController.SESSION_ROLE) != "doctor")
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+
             int doctorId = (int)HttpContext.Session.GetInt32(HomeController.SESSION_ID);
 
             var appointment = _appDbContext.Appointments
