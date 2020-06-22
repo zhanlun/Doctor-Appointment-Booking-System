@@ -30,7 +30,42 @@ namespace NgDoctorBookingSystem.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            int id = HttpContext.Session.GetInt32(SESSION_ID)?? -1;
+
+            // let user login
+            if (id < 1)
+            {
+                return View();
+            }
+
+            // redirect login user
+            string role = HttpContext.Session.GetString(SESSION_ROLE);
+            string name = HttpContext.Session.GetString(SESSION_NAME);
+
+            if (role.ToLower() == "patient")
+            {
+                if (_appDbContext.Patients
+                    .Where(x => x.Id == id)
+                    .Where(x => x.Name == name)
+                    .FirstOrDefault() == null)
+                {
+                    return View();
+                }
+
+            }
+            else if (role.ToLower() == "doctor")
+            {
+                if (_appDbContext.Doctors
+                    .Where(x => x.Id == id)
+                    .Where(x => x.Name == name)
+                    .FirstOrDefault() == null)
+                {
+                    return View();
+                }
+            }
+            else return View();
+
+            return RedirectToAction("Index", role);
         }
 
         [HttpPost]
@@ -126,6 +161,13 @@ namespace NgDoctorBookingSystem.Controllers
             HttpContext.Session.SetInt32(SESSION_ID, id);
 
             return RedirectToAction("Index", "Patient");
+        }
+        
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Privacy()
