@@ -30,7 +30,6 @@ namespace NgDoctorBookingSystem.Controllers
                 .Where(x => x.PatientId == HttpContext.Session.GetInt32(HomeController.SESSION_ID))
                 .Include(x => x.Condition)
                 .Include(x => x.Doctor)
-                .OrderByDescending(x => x.DateApproved)
                 .ToList();
 
             return View(model);

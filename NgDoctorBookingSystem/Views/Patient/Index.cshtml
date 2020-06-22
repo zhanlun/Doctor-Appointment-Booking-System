@@ -3,85 +3,145 @@
     Layout = "_PatientLayout";
     ViewData["Title"] = "View Appointment";
 }
-    <div class="container table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Date Time</th>
-                    <th scope="col">Date Approved</th>
-                    <th scope="col">Doctor Id</th>
-                    <th scope="col">Doctor Name</th>
-                    <th scope="col">Condition Id</th>
-                    <th scope="col">Condition Name</th>
-                    <th scope="col">Update</th>
-                    <th scope="col">Cancel</th>
-                </tr>
-            </thead>
-            <tbody>
 
-                @if (Model == null || Model.Count == 0)
-                {
-                    <tr>
-                        <td colspan="9" class="text-center">No data</td>
-                    </tr>
-                }
 
-                @if (Model != null) 
-                @for (int i = 0; i < Model.Count; i++)
-                {
-                    var appointment = Model[i];
+@{
+    var waitingList = Model.Where(x => x.DateApproved == null)
+                .OrderBy(x => x.DateTime).ToList();
+    var approvedList = Model.Where(x => x.DateApproved != null)
+                .OrderByDescending(x => x.DateTime).ToList();
+}
 
+<div class="container table-responsive">
+    <h3>Waiting for Approval</h3>
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <th scope="row">@(i+1)</th>
-                <td>@appointment.DateTime</td>
-                <td>@(appointment.DateApproved == null ? "WAITING APPROVAL" : appointment.DateApproved.ToString())</td>
-                <td>@appointment.DoctorId</td>
-                <td>@appointment.Doctor?.Name</td>
-                <td>@appointment.ConditionId</td>
-                <td>@appointment.Condition?.Name</td>
+                <th scope="col">No</th>
+                <th scope="col">Date Time</th>
+                <th scope="col">Status</th>
+                <th scope="col">Doctor Id</th>
+                <th scope="col">Doctor Name</th>
+                <th scope="col">Condition Id</th>
+                <th scope="col">Condition Name</th>
+                <th scope="col">Update</th>
+                <th scope="col">Cancel</th>
+            </tr>
+        </thead>
+        <tbody>
 
-                <td>
-                    <a class="text-primary" asp-action="Update" asp-controller="Patient" asp-route-id="@appointment.Id">
-                        <span class="material-icons">
-                            create
-                        </span>
-                    </a>
-                </td>
-                <td>
+            @if (waitingList == null || waitingList.Count == 0)
+            {
+                <tr>
+                    <td colspan="9" class="text-center">No data</td>
+                </tr>
+            }
 
-                    <form method="post">
-                        <a class="text-danger" data-toggle="modal" data-target="#cancelModal_@appointment.Id">
-                            <span class="material-icons">
-                                delete
-                            </span>
-                        </a>
+            @if (waitingList != null)
+                @for (int i = 0; i < waitingList.Count; i++)
+                {
+                    var appointment = waitingList[i];
 
-                        <div class="modal fade" id="cancelModal_@appointment.Id">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Confirm cancel?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-danger" asp-action="Cancel" asp-controller="Patient" asp-route-id="@appointment.Id">Yes</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td>@appointment.DateTime</td>
+                        <td>@(appointment.DateApproved == null ? "WAITING APPROVAL" : appointment.DateApproved.ToString())</td>
+                        <td>@appointment.DoctorId</td>
+                        <td>@appointment.Doctor?.Name</td>
+                        <td>@appointment.ConditionId</td>
+                        <td>@appointment.Condition?.Name</td>
+
+                        <td>
+                            <a class="text-primary" asp-action="Update" asp-controller="Patient" asp-route-id="@appointment.Id">
+                                <span class="material-icons">
+                                    create
+                                </span>
+                            </a>
+                        </td>
+                        <td>
+                            <form method="post">
+                                <a class="text-danger" data-toggle="modal" data-target="#cancelModal_@appointment.Id">
+                                    <span class="material-icons">
+                                        delete
+                                    </span>
+                                </a>
+
+                                <div class="modal fade" id="cancelModal_@appointment.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Confirm cancel?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger" asp-action="Cancel" asp-controller="Patient" asp-route-id="@appointment.Id">Yes</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </form>
+                            </form>
+                        </td>
 
-                </td>
+                    </tr>
 
-            </tr>
-               
                 }
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
+
+<div class="container table-responsive mt-5">
+    <h3>Approved</h3>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Date Time</th>
+                <th scope="col">Date Approved</th>
+                <th scope="col">Doctor Id</th>
+                <th scope="col">Doctor Name</th>
+                <th scope="col">Condition Id</th>
+                <th scope="col">Condition Name</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (approvedList == null || approvedList.Count == 0)
+            {
+                <tr>
+                    <td colspan="8" class="text-center">No data</td>
+                </tr>
+            }
+
+            @if (approvedList != null)
+                @for (int i = 0; i < approvedList.Count; i++)
+                {
+                    var appointment = approvedList[i];
+
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td>@appointment.DateTime</td>
+                        <td>@(appointment.DateApproved == null ? "WAITING APPROVAL" : appointment.DateApproved.ToString())</td>
+                        <td>@appointment.DoctorId</td>
+                        <td>@appointment.Doctor?.Name</td>
+                        <td>@appointment.ConditionId</td>
+                        <td>@appointment.Condition?.Name</td>
+
+                        <td>
+                            <a class="text-primary">
+                                <span>
+                                    Approved
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+
+                }
+        </tbody>
+    </table>
+</div>
